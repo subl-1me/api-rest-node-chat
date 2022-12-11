@@ -1,0 +1,12 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Sendit Chat",
+    "description": "Realtime chat application.",
+    "contact": {
+      "name": "Julio Ugalde",
+      "email": "julio.ugalde404@gmail.com"
+    },
+    "version": "1.0.1"
+  }
+}
