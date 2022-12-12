@@ -57,7 +57,6 @@ class ChatService extends Service{
             if(chat.participants.length <= 2){
                 chat.isGroup = false;
             }
-
             chat.save();
         }else{
 
@@ -96,7 +95,7 @@ class ChatService extends Service{
             }
         })
 
-        if(updatedChat.participants > 2) { updatedChat.isGroup = true }
+        if(updatedChat.participants.length > 2) { updatedChat.isGroup = true }
         updatedChat.save();
 
     
@@ -164,13 +163,3 @@ class ChatService extends Service{
 }
 
 module.exports = new ChatService;
-
-// module.exports = {
-//     init,
-//     getChatList,
-//     getActiveChat,
-//     removeActiveChat,
-//     addParticipant,
-//     removeParticipant,
-//     update
-// }
