@@ -1,6 +1,8 @@
 const app = require("./app");
 const server = require("http").createServer(app);
 const PORT = process.env.PORT || 3001;
+const URI_URL = process.env.URI_URL || `http://localhost:${PORT}`;
+
 const io = require("socket.io")(server, {
   cors: {
     origin: "*",
@@ -23,7 +25,7 @@ const onConnection = (socket) => {
 io.on("connection", onConnection);
 
 server.listen(PORT, () => {
-  console.log(`Server listen on: http://localhost:${PORT}`);
+  console.log(`Server listen on: ${URI_URL}`);
 
   swagger(app, PORT);
 });
