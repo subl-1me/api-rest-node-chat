@@ -198,6 +198,14 @@ class UserService extends Service {
       message: "User deleted successfully",
     };
   }
+
+  async markAsTester(userId) {
+    const updatedUser = await User.findByIdAndUpdate(userId, {
+      isTester: true,
+    });
+
+    return updatedUser;
+  }
 }
 
 module.exports = new UserService();

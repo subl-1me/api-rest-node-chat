@@ -1,13 +1,14 @@
-'use strict'
+"use strict";
 
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const errorHandler = require('../middlewares/errorHandler');
-const tryCatch = require('../utils/tryCatch');
+const errorHandler = require("../middlewares/errorHandler");
+const tryCatch = require("../utils/tryCatch");
 
 // Controller
-const userController = require('../controllers/user');
+const userController = require("../controllers/user");
+const authenticate = require("../middlewares/authenticate");
 
 /**
  * @openapi
@@ -37,7 +38,7 @@ const userController = require('../controllers/user');
  *                      schema:
  *                          type: object
  *                          properties:
- *                              status: 
+ *                              status:
  *                                  type: string
  *                                  example: OK
  *                              user:
@@ -58,7 +59,7 @@ const userController = require('../controllers/user');
  *                                  type: string
  *                                  example: error
  */
-router.post('/', errorHandler, tryCatch(userController.insert));
+router.post("/", errorHandler, tryCatch(userController.insert));
 
 /**
  * @openapi
@@ -84,12 +85,12 @@ router.post('/', errorHandler, tryCatch(userController.insert));
  *                      schema:
  *                          type: object
  *                          properties:
- *                              status: 
+ *                              status:
  *                                  type: string
  *                                  example: success
- *                              token: 
+ *                              token:
  *                                  type: string
- *                              payload: 
+ *                              payload:
  *                                  type: array
  *          500:
  *              description: Internal server error
@@ -105,7 +106,11 @@ router.post('/', errorHandler, tryCatch(userController.insert));
  *                                  type: string
  *                                  example: error
  */
-router.post('/authenticate', errorHandler, tryCatch(userController.authenticate));
+router.post(
+  "/authenticate",
+  errorHandler,
+  tryCatch(userController.authenticate),
+);
 
 /**
  * @openapi
@@ -127,10 +132,10 @@ router.post('/authenticate', errorHandler, tryCatch(userController.authenticate)
  *                      schema:
  *                          type: object
  *                          properties:
- *                              status: 
+ *                              status:
  *                                  type: string
  *                                  example: success
- *                              user: 
+ *                              user:
  *                                  type: array
  *          500:
  *              description: Internal server error
@@ -145,13 +150,57 @@ router.post('/authenticate', errorHandler, tryCatch(userController.authenticate)
  *                              status:
  *                                  type: string
  *                                  example: error
- *             
+ *
  */
-router.get('/search/:username?', errorHandler, tryCatch(userController.item));
+router.get("/search/:username?", errorHandler, tryCatch(userController.item));
 
-router.put('/:userId?', tryCatch(userController.updateUser), errorHandler);
+/**
+ * @openapi
+ * /api/user/markAsTester/{userId}:
+ *  put:
+ *      tags:
+ *          - User
+ *      description: Set an active user as Tester
+ *      parameters:
+ *          - in: query
+ *            name: userId
+ *            schema:
+ *              type: string
+ *      responses:
+ *          200:
+ *              description: OK
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              success:
+ *                                  type: boolean
+ *                                  example: true
+ *
+ *          500:
+ *              description: Internal server error
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              message:
+ *                                  type: string
+ *                                  example: Some error message
+ *                              status:
+ *                                  type: string
+ *                                  example: error
+ */
+router.put(
+  "/markAsTester",
+  authenticate,
+  tryCatch(userController.markUserAsTester),
+  errorHandler,
+);
 
-router.delete('/:userId?', errorHandler, tryCatch(userController.remove));
+router.put("/:userId", tryCatch(userController.updateUser), errorHandler);
 
+router.delete("/:userId?", errorHandler, tryCatch(userController.remove));
 
 module.exports = router;

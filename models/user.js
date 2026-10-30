@@ -6,7 +6,10 @@ const { constans } = require("../constans/const");
 
 const UserScheme = new mongoose.Schema(
   {
-    username: { type: String },
+    username: {
+      type: String,
+      required: true,
+    },
     avatar: {
       public_id: {
         type: String,
@@ -20,9 +23,11 @@ const UserScheme = new mongoose.Schema(
     email: {
       type: String,
       unique: true,
+      required: true,
     },
-    password: { type: String },
+    password: { type: String, required: true },
     chats: [{ type: Schema.ObjectId, ref: "chat" }],
+    isTester: { type: Boolean, default: false },
   },
   {
     timestamps: true,

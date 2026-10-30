@@ -12,9 +12,18 @@ const insert = async function (req, res) {
   return res.status(200).send(serviceResponse);
 };
 
+const markUserAsTester = async function (req, res) {
+  const { authentication } = req;
+  if (!authentication) {
+    return res.status(401).send({ success: false, message: "Unauthorized" });
+  }
+
+  const response = await userService.markAsTester(authentication._id);
+  return res.status(200).send(response);
+};
+
 const authenticate = async function (req, res) {
   const serviceData = await userService.login(req.body);
-
   return res.status(200).send(serviceData);
 };
 
@@ -50,4 +59,5 @@ module.exports = {
   item,
   updateUser,
   remove,
+  markUserAsTester,
 };
