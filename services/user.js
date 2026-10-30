@@ -199,6 +199,14 @@ class UserService extends Service {
     };
   }
 
+  async getTesters() {
+    const testers = await User.find({
+      isTester: true,
+    });
+
+    return testers;
+  }
+
   async markAsTester(userId) {
     const updatedUser = await User.findByIdAndUpdate(userId, {
       isTester: true,

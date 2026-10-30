@@ -5,6 +5,7 @@ const {
   USERNAME_IS_REQUIRED,
   USER_ID_REQUIRED,
 } = require("../constans/errorCodes");
+const { safeTester } = require("../utils/safeTesters");
 
 const insert = async function (req, res) {
   const serviceResponse = await userService.register(req.body);
@@ -53,6 +54,12 @@ const remove = async function (req, res) {
   return res.status(response.status).send(response);
 };
 
+const getTesterList = async function (_req, res) {
+  const users = await userService.getTesters();
+  const safeUsers = users.map((user) => safeTester(user));
+  return res.status(200).send({ success: true, users: safeUsers });
+};
+
 module.exports = {
   insert,
   authenticate,
@@ -60,4 +67,5 @@ module.exports = {
   updateUser,
   remove,
   markUserAsTester,
+  getTesterList,
 };

@@ -199,6 +199,8 @@ router.put(
   errorHandler,
 );
 
+router.get("/testers", tryCatch(userController.getTesterList));
+
 router.put("/:userId", tryCatch(userController.updateUser), errorHandler);
 
 router.delete("/:userId?", errorHandler, tryCatch(userController.remove));
